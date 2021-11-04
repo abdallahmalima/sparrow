@@ -34,8 +34,7 @@ class FsectionController extends Controller
             
         }
        
-        \Session::flash('success','Updated Successfuly');
       
-      return redirect()->route('fsections.edit',$fsection)->with('fsection',$fsection);
+      return redirect()->route('fsections.edit',$fsection)->with(compact('fsection'))->withSuccess('Updated Successfully');
     }
 }
