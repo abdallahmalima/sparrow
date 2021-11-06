@@ -89,7 +89,7 @@ class ServiceController extends Controller
             'image'=>'image'
         ]);
 
-        $service->update($request->except('image'));
+        $service->update($request->only('title','description'));
         if($request->hasFile('image')){
            $this->updateImage($service);
            

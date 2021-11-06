@@ -73,24 +73,11 @@ class LogoController extends Controller
     public function update(Request $request)
     {
         //
-        $request->validate([
+       $data=$request->validate([
             'text'=>['required','string']
         ]);
       
-        $logo=Logo::first();
-        if($logo){
-            $logo->update($request->except('image'));
-            if($request->hasFile('image')){
-              $this->updateImage( $logo);
-            }
-        }else{
-          
-            $logo=Logo::create($request->except('image'));
-            if($request->hasFile('image')){
-                $logo->image()->create(['url'=>$request->file('image')->store('images','public')]);
-            }
-        }
-       
+        $logo=$this->firstUpdateOrCreateWithImage(Logo::class,$data);
       
       return redirect()->route('logos.edit',$logo)->withLogo($logo)->withSuccess('Updated Successfuly');
     }

@@ -10,7 +10,6 @@ class SsectionController extends Controller
     public function edit()
     {
         //
-        
         $ssection=Ssection::first();
         return view('ssections.edit',compact('ssection'));
     }
@@ -18,16 +17,11 @@ class SsectionController extends Controller
     public function update(Request $request)
     {
         //
-        $request->validate([
+        $data=$request->validate([
             'title'=>'required|string|max:255',
         ]);
-        $ssection=Ssection::first();
-        if($ssection){
-            $ssection->update($request->all());
-            
-        }else{
-            $ssection= Ssection::create($request->all());
-        }
+
+        $ssection=$this->firstUpdateOrCreate(Ssection::class,$data);
       return redirect()->route('ssections.edit',$ssection)->with(compact('ssection'))->withSuccess('Updated Successfully');
     }
 }

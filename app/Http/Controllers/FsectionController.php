@@ -19,20 +19,12 @@ class FsectionController extends Controller
     public function update(Request $request)
     {
         //
-       $datas= $request->validate([
+       $data= $request->validate([
             'title'=>'required|string|max:255',
             'description'=>'required|string|max:255'
         ]);
       
-        $fsection=Fsection::first();
-        if($fsection){
-            $fsection->update($datas);
-            
-        }else{
-          
-            $fsection= Fsection::create( $datas);
-            
-        }
+        $fsection=$this->firstUpdateOrCreate(Fsection::class, $data);
        
       
       return redirect()->route('fsections.edit',$fsection)->with(compact('fsection'))->withSuccess('Updated Successfully');

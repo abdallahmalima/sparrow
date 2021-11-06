@@ -19,25 +19,16 @@ class FooterController extends Controller
 
     public function update(Request $request)
     {
-        $request->validate([
+        $data=$request->validate([
             'title'=>'required|string|max:255',
             'description'=>'required|string|max:255',
             'phone'=>'required|string|max:13|min:10',
             'email'=>'required|string|email'
         ]);
       
-        $footer=Footer::first();
-        if($footer){
-            $footer->update($request->all());
-            
-        }else{
-          
-            $footer= Footer::create($request->all());
-            
-        }
-       
-        \Session::flash('success','Updated Successfuly');
+
+        $footer=$this->firstUpdateOrCreate(Footer::class,$data);
       
-      return redirect()->route('footers.edit',$footer)->with('footer',$footer);
+      return redirect()->route('footers.edit',$footer)->with('footer',$footer)->withSuccess('Updated Successfully');
     }
 }

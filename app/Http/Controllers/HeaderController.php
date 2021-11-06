@@ -24,22 +24,8 @@ class HeaderController extends Controller
             'image'=>'image'
         ]);
       
-        $header=Header::first();
-        if($header){
-            $header->update($request->except('image'));
-            if($request->hasFile('image')){
-             $this->updateImage($header);
-            }
-        }else{
-          
-            $header=Header::create($request->except('image'));
-            if($request->hasFile('image')){
-                $header->image()->create(['url'=>$request->file('image')->store('images','public')]);
-            }
-        }
+        $header=$this->firstUpdateOrCreateWithImage(Header::class,$request->only('title','description'));
        
-       
-      
       return redirect()->route('headers.edit',$header)->with('header',$header)->withSuccess('Updated Successfuly');
     }
 

@@ -42,9 +42,10 @@ class GalleryController extends Controller
             'image'=>'required|image'
         ]);
 
-        $gallery=Gallery::create($request->except('image'));
-        $gallery->image()->create(['url'=>$request->file('image')->store('images','public')]);
-    
+        $gallery=Gallery::create($request->only('title'));
+        if($request->hasFile('image')){
+            $this->storeImage( $gallery);
+        }
         return redirect()->route('galleries.create')->withSuccess('Created Successfully');;
     }
 
@@ -86,7 +87,7 @@ class GalleryController extends Controller
             'image'=>'image'
         ]);
         //
-        $gallery->update($request->except('image'));
+        $gallery->update($request->only('title'));
         if($request->hasFile('image')){
             $this->updateImage($gallery);
            

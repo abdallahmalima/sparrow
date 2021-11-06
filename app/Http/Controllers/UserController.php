@@ -56,7 +56,7 @@ class UserController extends Controller
         $inputs['password']=bcrypt($request->input('password'));
         $user=User::create($inputs);
         if($request->hasFile('image')){
-            $user->image()->create(['url'=>$request->file('image')->store('images','public')]);
+           $this->storeImage($user);
         }
        
         return redirect()->route('users.create')->with(compact('user'))->withSuccess('Created Successfully');
@@ -94,29 +94,25 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        if(auth()->id()!=$user->id){
+    
+        if($request->user()->isNot($user)){
             return redirect()->route('users.edit',auth()->user());
         } 
-
+      
          $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'image' => ['required', 'file'],
+            'image' => ['image'],
             'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['nullable','min:8', 'confirmed'],
         ]);
-      
+     
         $inputs=$request->only('name','email');
         if($request->filled('password')){
             $inputs['password']=bcrypt($request->input('password'));
         }
         $user->update($inputs);
         if($request->hasFile('image')){
-            if($user->image){
-               $this->deleteWithImage($user);
-            }else{
-                $user->image()->create(['url'=>$request->file('image')->store('images','public')]);
-            }
-           
+            $this->updateImage($user);
         }
         return redirect()->route('users.edit',$user)->with(compact('user'))->withSuccess('Updated Successfuly');
     }
