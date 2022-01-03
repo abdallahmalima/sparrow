@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\AppEvent;
 use App\Models\Service;
 use App\Notifications\ServiceUpdatedNotification;
 use Illuminate\Http\Request;
@@ -94,7 +95,8 @@ class ServiceController extends Controller
            $this->updateImage($service);
            
         }
-      // $request->user()->notify(new ServiceUpdatedNotification());
+      //  AppEvent::dispatch(AppEvent::class);
+        $request->user()->notify(new ServiceUpdatedNotification());
         return redirect()->route('services.edit',$service)->withSuccess('Updated Successfuly');
     }
 

@@ -26,8 +26,10 @@ class Controller extends BaseController
 
      protected function updateImage($model){
          if($model->image){
+            if(request()->hasFile('image')){
              $this->deleteFile($model->image->url??null);
              $model->image()->update(['url'=>request()->file('image')->store('images','public')]);
+            }
          }else{
              $model->image()->create(['url'=>request()->file('image')->store('images','public')]); 
          }

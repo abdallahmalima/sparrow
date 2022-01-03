@@ -45,4 +45,6 @@ Route::group(['middleware'=>'auth'],function(){
     Route::get('ssections/edit',[App\Http\Controllers\SsectionController::class,'edit'])->name('ssections.edit');
     Route::put('ssections',[App\Http\Controllers\SsectionController::class,'update'])->name('ssections.update');
     Route::post('/logout',[MyLoginController::class,'logout'])->name('logout');
+
+    Route::resource('clients',App\Http\Controllers\ClientController::class);
 });
